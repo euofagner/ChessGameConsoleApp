@@ -3,16 +3,27 @@ using ChessGameConsoleApp.Board;
 using ChessGameConsoleApp.Board.Enums;
 using ChessGameConsoleApp.Board.Exceptions;
 using ChessGameConsoleApp.Chess;
+using System.Runtime.InteropServices;
+using System.Text.Json.Serialization;
 
 try
 {
-    GameBoard gameBoard = new(8, 8);
-    gameBoard.PlacePiece(new Tower(Color.White, gameBoard), new Position(0, 0));
-    gameBoard.PlacePiece(new Tower(Color.White, gameBoard), new Position(1, 5));
-    gameBoard.PlacePiece(new King(Color.Black, gameBoard), new Position(0, 2));
-    gameBoard.PlacePiece(new King(Color.Black, gameBoard), new Position(3, 7));
+    ChessMatch chessMatch = new ChessMatch();
+    while (!chessMatch.Finished)
+    {
+        Console.Clear();
+        Display.DisplayGameBoard(chessMatch.GameBoard!);
 
-    Display.DisplayGameBoard(gameBoard);
+        Console.WriteLine();
+        Console.Write("Origem: ");
+        Position source = Display.ReadChessPosition().ToPosition();
+        Console.Write("Destino: ");
+        Position target = Display.ReadChessPosition().ToPosition();
+
+        chessMatch.ExecuteMove(source, target);
+    }
+
+    
 }
 catch (GameBoardException e)
 {

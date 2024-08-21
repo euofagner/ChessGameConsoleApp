@@ -39,6 +39,17 @@ internal class GameBoard(int lines, int columns)
         piece.Position = pos;
     }
 
+    public Piece RemovePiece(Position pos)
+    {
+        if (Piece(pos) == null)
+            return null;
+
+        Piece aux = Piece(pos);
+        aux.Position = null;
+        _pieces![pos.Line, pos.Column] = null;
+        return aux;
+    }
+
     public bool ValidPosition(Position pos)
     {
         if (pos.Line < 0 || pos.Line >= Lines || pos.Column < 0 || pos.Column >= Columns)

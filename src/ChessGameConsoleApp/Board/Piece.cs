@@ -13,4 +13,9 @@ internal class Piece(Color color, GameBoard board)
     public Color Color { get; protected set; } = color;
     public int Moves { get; protected set; }
     public GameBoard? GameBoard { get; protected set; } = board;
+
+    public void IncrementMoves()
+    {
+        Moves++;
+    }
 }

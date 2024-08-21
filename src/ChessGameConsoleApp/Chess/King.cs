@@ -14,6 +14,6 @@ internal class King : Piece
 
     public override string ToString()
     {
-        return "K";
+        return "R";
     }
 }
