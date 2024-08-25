@@ -22,8 +22,6 @@ try
 
         chessMatch.ExecuteMove(source, target);
     }
-
-    
 }
 catch (GameBoardException e)
 {

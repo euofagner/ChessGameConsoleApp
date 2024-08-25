@@ -39,6 +39,6 @@ internal class ChessMatch //test primary constructor
         GameBoard.PlacePiece(new Tower(Color.White, GameBoard), new ChessPosition('d', 2).ToPosition());
         GameBoard.PlacePiece(new Tower(Color.White, GameBoard), new ChessPosition('e', 2).ToPosition());
         GameBoard.PlacePiece(new Tower(Color.White, GameBoard), new ChessPosition('e', 1).ToPosition());
-        GameBoard.PlacePiece(new King(Color.White, GameBoard), new ChessPosition('d', 1).ToPosition());
+        GameBoard.PlacePiece(new King(Color.Black, GameBoard), new ChessPosition('d', 1).ToPosition());
     }
 }
