@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ChessGameConsoleApp.Board;
 
-internal class Piece(Color color, GameBoard board)
+internal abstract  class Piece(Color color, GameBoard board)
 {
     public Position? Position { get; set; } = null;
     public Color Color { get; protected set; } = color;
@@ -18,4 +18,6 @@ internal class Piece(Color color, GameBoard board)
     {
         Moves++;
     }
+
+    public abstract bool[,] PossibleMoves();
 }

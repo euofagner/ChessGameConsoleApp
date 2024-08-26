@@ -27,7 +27,7 @@ internal class ChessMatch //test primary constructor
     public void ExecuteMove(Position source, Position target)
     {
         Piece piece = GameBoard!.RemovePiece(source);
-        piece.IncrementMoves();
+        piece.IncrementMoves(); //Talvez precise retirar esta chamada junto com a implementação na classe
         Piece capturedPiece = GameBoard.RemovePiece(target);
         GameBoard.PlacePiece(piece, target);
     }

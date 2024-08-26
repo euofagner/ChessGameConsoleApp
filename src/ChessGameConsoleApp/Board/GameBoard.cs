@@ -1,4 +1,5 @@
 ﻿using ChessGameConsoleApp.Board.Exceptions;
+using ChessGameConsoleApp.Chess;
 using System;
 using System.Collections.Generic;
 using System.Linq;

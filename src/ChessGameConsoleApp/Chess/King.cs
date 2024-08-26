@@ -8,9 +8,71 @@ using System.Threading.Tasks;
 
 namespace ChessGameConsoleApp.Chess;
 
-internal class King : Piece
+internal class King(Color color, GameBoard gameBoard) : Piece(color, gameBoard)
 {
-    public King(Color color, GameBoard gameBoard) : base(color, gameBoard) { }
+    private bool CanMove(Position pos)
+    {
+        Piece piece = gameBoard.Piece(pos);
+        return piece == null || piece.Color != piece.Color;
+    }
+
+    public override bool[,] PossibleMoves()
+    {
+        bool[,] mat = new bool[gameBoard.Lines, gameBoard.Columns];
+
+        Position pos = new Position(0, 0);
+
+        //up
+        pos.SetValues(Position.Line - 1, Position.Column);
+        if (gameBoard.ValidPosition(pos) && CanMove(pos))
+        {
+            mat[pos.Line, pos.Column] = true;
+        }
+
+        pos.SetValues(Position.Line - 1, Position.Column + 1);
+        if (gameBoard.ValidPosition(pos) && CanMove(pos))
+        {
+            mat[pos.Line, pos.Column] = true;
+        }
+
+        pos.SetValues(Position.Line, Position.Column + 1);
+        if (gameBoard.ValidPosition(pos) && CanMove(pos))
+        {
+            mat[pos.Line, pos.Column] = true;
+        }
+
+        pos.SetValues(Position.Line + 1, Position.Column + 1);
+        if (gameBoard.ValidPosition(pos) && CanMove(pos))
+        {
+            mat[pos.Line, pos.Column] = true;
+        }
+
+        pos.SetValues(Position.Line + 1, Position.Column);
+        if (gameBoard.ValidPosition(pos) && CanMove(pos))
+        {
+            mat[pos.Line, pos.Column] = true;
+        }
+
+        pos.SetValues(Position.Line + 1, Position.Column - 1);
+        if (gameBoard.ValidPosition(pos) && CanMove(pos))
+        {
+            mat[pos.Line, pos.Column] = true;
+        }
+
+        pos.SetValues(Position.Line, Position.Column - 1);
+        if (gameBoard.ValidPosition(pos) && CanMove(pos))
+        {
+            mat[pos.Line, pos.Column] = true;
+        }
+
+        pos.SetValues(Position.Line - 1, Position.Column - 1);
+        if (gameBoard.ValidPosition(pos) && CanMove(pos))
+        {
+            mat[pos.Line, pos.Column] = true;
+        }
+
+        return mat;
+    }
 
     public override string ToString()
     {
