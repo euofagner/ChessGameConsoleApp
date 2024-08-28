@@ -14,11 +14,7 @@ try
         try
         {
             Console.Clear();
-            Display.DisplayGameBoard(chessMatch.GameBoard!);
-
-            Console.WriteLine();
-            Console.WriteLine($"Turno: {chessMatch.Shift}");
-            Console.WriteLine($"Aguardando jogada do: {chessMatch.CurrentPlayer}");
+            Display.PrintChessMatch(chessMatch);
 
             Console.WriteLine();
             Console.Write("Origem: ");

@@ -12,6 +12,8 @@ namespace ChessGameConsoleApp.Chess;
 
 internal class ChessMatch //test primary constructor
 {
+    private HashSet<Piece> _pieces;
+    private HashSet<Piece> _capturedPieces;
     public int Shift { get; private set; }
     public Color CurrentPlayer { get; private set; }
     public GameBoard? GameBoard { get; private set; }
@@ -23,6 +25,8 @@ internal class ChessMatch //test primary constructor
         Shift = 1;
         CurrentPlayer = Color.White;
         Finished = false;
+        _pieces = new HashSet<Piece>();
+        _capturedPieces = new HashSet<Piece>();
         PlacePieces();
     }
 
@@ -32,6 +36,9 @@ internal class ChessMatch //test primary constructor
         piece.IncrementMoves(); //Talvez precise retirar esta chamada junto com a implementação na classe
         Piece capturedPiece = GameBoard.RemovePiece(target);
         GameBoard.PlacePiece(piece, target);
+
+        if(capturedPiece != null)
+            _capturedPieces.Add(capturedPiece);
     }
 
     public void ExecutePlay(Position source, Position target)
@@ -67,20 +74,49 @@ internal class ChessMatch //test primary constructor
             CurrentPlayer = Color.White;
     }
 
+    public HashSet<Piece> CapturedPieces(Color color)
+    {
+        HashSet<Piece> aux = new();
+        foreach(Piece piece in _capturedPieces)
+        {
+            if (piece.Color == color)
+                aux.Add(piece);
+        }
+        return aux;
+    }
+
+    public HashSet<Piece> PiecesInGame(Color color)
+    {
+        HashSet<Piece> aux = new HashSet<Piece>();
+        foreach (Piece piece in _pieces)
+        {
+            if (piece.Color == color)
+                aux.Add(piece);
+        }
+        aux.ExceptWith(CapturedPieces(color)); 
+        return aux;
+    }
+
+    public void PlaceNewPiece(char column, int line, Piece piece)
+    {
+        GameBoard.PlacePiece(piece, new ChessPosition(column, line).ToPosition());
+        _pieces.Add(piece);
+    }
+
     private void PlacePieces()
     {
-        GameBoard.PlacePiece(new Tower(Color.White, GameBoard), new ChessPosition('c', 1).ToPosition());
-        GameBoard.PlacePiece(new Tower(Color.White, GameBoard), new ChessPosition('c', 2).ToPosition());
-        GameBoard.PlacePiece(new Tower(Color.White, GameBoard), new ChessPosition('d', 2).ToPosition());
-        GameBoard.PlacePiece(new Tower(Color.White, GameBoard), new ChessPosition('e', 2).ToPosition());
-        GameBoard.PlacePiece(new Tower(Color.White, GameBoard), new ChessPosition('e', 1).ToPosition());
-        GameBoard.PlacePiece(new King(Color.White, GameBoard), new ChessPosition('d', 1).ToPosition());
+        PlaceNewPiece('c', 1, new Tower(Color.White, GameBoard));
+        PlaceNewPiece('c', 2, new Tower(Color.White, GameBoard));
+        PlaceNewPiece('d', 2, new Tower(Color.White, GameBoard));
+        PlaceNewPiece('e', 2, new Tower(Color.White, GameBoard));
+        PlaceNewPiece('e', 1, new Tower(Color.White, GameBoard));
+        PlaceNewPiece('d', 1, new King(Color.White, GameBoard));
 
-        GameBoard.PlacePiece(new Tower(Color.Black, GameBoard), new ChessPosition('c', 8).ToPosition());
-        GameBoard.PlacePiece(new Tower(Color.Black, GameBoard), new ChessPosition('c', 7).ToPosition());
-        GameBoard.PlacePiece(new Tower(Color.Black, GameBoard), new ChessPosition('d', 7).ToPosition());
-        GameBoard.PlacePiece(new Tower(Color.Black, GameBoard), new ChessPosition('e', 7).ToPosition());
-        GameBoard.PlacePiece(new Tower(Color.Black, GameBoard), new ChessPosition('e', 8).ToPosition());
-        GameBoard.PlacePiece(new King(Color.Black, GameBoard), new ChessPosition('d', 8).ToPosition());
+        PlaceNewPiece('c', 7, new Tower(Color.Black, GameBoard));
+        PlaceNewPiece('c', 8, new Tower(Color.Black, GameBoard));
+        PlaceNewPiece('d', 7, new Tower(Color.Black, GameBoard));
+        PlaceNewPiece('e', 7, new Tower(Color.Black, GameBoard));
+        PlaceNewPiece('e', 8, new Tower(Color.Black, GameBoard));
+        PlaceNewPiece('d', 8, new King(Color.Black, GameBoard));
     }
 }

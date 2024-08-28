@@ -11,6 +11,49 @@ namespace ChessGameConsoleApp;
 
 internal class Display 
 {
+    public static void PrintChessMatch(ChessMatch chessMatch)
+    {
+        DisplayGameBoard(chessMatch.GameBoard);
+        Console.WriteLine();
+        PrintCapturedPieces(chessMatch);
+        Console.WriteLine();
+        Console.WriteLine($"Turno: {chessMatch.Shift}");
+        if (chessMatch.CurrentPlayer == Color.Black)
+        {
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.Write($"Aguardando jogada: ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(chessMatch.CurrentPlayer);
+            Console.ForegroundColor = aux;
+        }
+        else
+            Console.WriteLine($"Aguardando jogada: {chessMatch.CurrentPlayer}");
+    }
+
+    public static void PrintCapturedPieces(ChessMatch chessMatch)
+    {
+        Console.WriteLine("Peças capturadas:");
+        Console.Write("Brancas: ");
+        PrintSetPieces(chessMatch.CapturedPieces(Color.White));
+        Console.WriteLine();
+        Console.Write("Pretas: ");
+        ConsoleColor aux = Console.ForegroundColor;
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        PrintSetPieces(chessMatch.CapturedPieces(Color.Black));
+        Console.ForegroundColor = aux;  
+        Console.WriteLine();
+    }
+
+    public static void PrintSetPieces(HashSet<Piece> setPieces)
+    {
+        Console.Write("[");
+        foreach(Piece piece in setPieces)
+        {
+            Console.Write($"{piece} ");
+        }
+        Console.Write("]");
+    }
+
     public static void DisplayGameBoard(GameBoard gameBoard)
     {
         for (int i = 0; i < gameBoard.Lines; i++)
