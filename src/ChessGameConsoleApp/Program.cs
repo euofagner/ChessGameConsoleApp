@@ -11,22 +11,37 @@ try
     ChessMatch chessMatch = new ChessMatch();
     while (!chessMatch.Finished)
     {
-        Console.Clear();
-        Display.DisplayGameBoard(chessMatch.GameBoard!);
+        try
+        {
+            Console.Clear();
+            Display.DisplayGameBoard(chessMatch.GameBoard!);
 
-        Console.WriteLine();
-        Console.Write("Origem: ");
-        Position source = Display.ReadChessPosition().ToPosition();
+            Console.WriteLine();
+            Console.WriteLine($"Turno: {chessMatch.Shift}");
+            Console.WriteLine($"Aguardando jogada do: {chessMatch.CurrentPlayer}");
 
-        bool[,] possiblePositions = chessMatch.GameBoard!.Piece(source).PossibleMoves();
+            Console.WriteLine();
+            Console.Write("Origem: ");
+            Position source = Display.ReadChessPosition().ToPosition();
+            chessMatch.ValidateSourcePosition(source);
 
-        Console.Clear();
-        Display.DisplayGameBoard(chessMatch.GameBoard!, possiblePositions);
+            bool[,] possiblePositions = chessMatch.GameBoard!.Piece(source).PossibleMoves();
 
-        Console.Write("Destino: ");
-        Position target = Display.ReadChessPosition().ToPosition();
+            Console.Clear();
+            Display.DisplayGameBoard(chessMatch.GameBoard!, possiblePositions);
 
-        chessMatch.ExecuteMove(source, target);
+            Console.WriteLine();
+            Console.Write("Destino: ");
+            Position target = Display.ReadChessPosition().ToPosition();
+            chessMatch.ValidateTargetPosition(source, target);
+
+            chessMatch.ExecutePlay(source, target);
+        }
+        catch(GameBoardException e)
+        {
+            Console.WriteLine(e.Message);
+            Console.ReadLine();
+        }
     }
 }
 catch (GameBoardException e)

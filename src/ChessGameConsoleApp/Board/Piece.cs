@@ -19,5 +19,25 @@ internal abstract  class Piece(Color color, GameBoard board)
         Moves++;
     }
 
+    public bool ExistPossibleMoves()
+    {
+        bool[,] mat = PossibleMoves();
+
+        for (int i = 0; i < GameBoard.Lines; i++)
+        {
+            for (int j = 0; j < GameBoard.Columns; j++)
+            {
+                if (mat[i, j])
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public bool CanMoveTo(Position pos)
+    {
+        return PossibleMoves()[pos.Line, pos.Column];
+    }
+
     public abstract bool[,] PossibleMoves();
 }

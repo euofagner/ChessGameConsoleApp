@@ -61,7 +61,6 @@ internal class Display
     {
         if (piece == null)
             Console.Write("- ");
-
         else
         {
             if (piece.Color == Color.White)
