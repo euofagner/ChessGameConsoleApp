@@ -19,6 +19,11 @@ internal abstract  class Piece(Color color, GameBoard board)
         Moves++;
     }
 
+    public void DecreasesMoves()
+    {
+        Moves--;
+    }
+
     public bool ExistPossibleMoves()
     {
         bool[,] mat = PossibleMoves();

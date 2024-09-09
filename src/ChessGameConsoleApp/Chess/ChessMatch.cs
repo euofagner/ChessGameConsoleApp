@@ -3,7 +3,10 @@ using ChessGameConsoleApp.Board.Enums;
 using ChessGameConsoleApp.Board.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
+using System.Numerics;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -30,7 +33,7 @@ internal class ChessMatch //test primary constructor
         PlacePieces();
     }
 
-    public void ExecuteMove(Position source, Position target)
+    public Piece ExecuteMove(Position source, Position target)
     {
         Piece piece = GameBoard!.RemovePiece(source);
         piece.IncrementMoves(); //Talvez precise retirar esta chamada junto com a implementação na classe
@@ -39,11 +42,26 @@ internal class ChessMatch //test primary constructor
 
         if(capturedPiece != null)
             _capturedPieces.Add(capturedPiece);
+
+        return capturedPiece;
+    }
+
+    public void UndoMove(Position source, Position target, Piece capturedPiece)
+    {
+        Piece piece = GameBoard.RemovePiece(target);
+        piece.DecreasesMoves();
     }
 
     public void ExecutePlay(Position source, Position target)
     {
-        ExecuteMove(source, target);
+        Piece capturedPiece = ExecuteMove(source, target);
+
+        if(InCheck(CurrentPlayer))
+        {
+            UndoMove(source, target, capturedPiece);
+            throw new GameBoardException("Você não pode se colocar em xeque!");
+        }
+
         Shift++;
         ChangePlayer();
     }
@@ -95,6 +113,40 @@ internal class ChessMatch //test primary constructor
         }
         aux.ExceptWith(CapturedPieces(color)); 
         return aux;
+    }
+
+    public bool InCheck(Color color)
+    {
+        Piece k = King(color);
+
+        if (k == null)
+            throw new GameBoardException("Não tem rei no tabuleiro!"); 
+
+        foreach(Piece pieces in PiecesInGame(Opponent(color)))
+        {
+            bool[,] mat = pieces.PossibleMoves();
+            if (mat[k.Position.Line, k.Position.Column]) 
+                return true;
+        }
+        return false;
+    }
+
+    private Piece King(Color color)
+    {
+        foreach (Piece piece in PiecesInGame(color))
+        {
+            if (piece is King)
+                return piece;
+        }
+        return null;
+    }
+
+    private Color Opponent(Color color)
+    {
+        if (color == Color.White)
+            return Color.Black;
+
+        return Color.White;
     }
 
     public void PlaceNewPiece(char column, int line, Piece piece)
