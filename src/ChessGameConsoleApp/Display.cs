@@ -18,6 +18,7 @@ internal class Display
         PrintCapturedPieces(chessMatch);
         Console.WriteLine();
         Console.WriteLine($"Turno: {chessMatch.Shift}");
+
         if (chessMatch.CurrentPlayer == Color.Black)
         {
             ConsoleColor aux = Console.ForegroundColor;
@@ -28,6 +29,9 @@ internal class Display
         }
         else
             Console.WriteLine($"Aguardando jogada: {chessMatch.CurrentPlayer}");
+
+        if (chessMatch.Check)
+            Console.WriteLine("Xeque!");
     }
 
     public static void PrintCapturedPieces(ChessMatch chessMatch)

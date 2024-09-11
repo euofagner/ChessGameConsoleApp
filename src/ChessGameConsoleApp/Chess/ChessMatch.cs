@@ -10,6 +10,7 @@ using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace ChessGameConsoleApp.Chess;
 
@@ -21,6 +22,7 @@ internal class ChessMatch //test primary constructor
     public Color CurrentPlayer { get; private set; }
     public GameBoard? GameBoard { get; private set; }
     public bool Finished { get; private set; }
+    public bool Check {  get; private set; }
     
     public ChessMatch()
     {
@@ -28,6 +30,7 @@ internal class ChessMatch //test primary constructor
         Shift = 1;
         CurrentPlayer = Color.White;
         Finished = false;
+        Check = false;
         _pieces = new HashSet<Piece>();
         _capturedPieces = new HashSet<Piece>();
         PlacePieces();
@@ -50,6 +53,14 @@ internal class ChessMatch //test primary constructor
     {
         Piece piece = GameBoard.RemovePiece(target);
         piece.DecreasesMoves();
+        
+        if (capturedPiece != null)
+        {
+            GameBoard.PlacePiece(capturedPiece, target);
+            _capturedPieces.Remove(capturedPiece);
+        }
+
+        GameBoard.PlacePiece(piece, source);
     }
 
     public void ExecutePlay(Position source, Position target)
@@ -61,6 +72,9 @@ internal class ChessMatch //test primary constructor
             UndoMove(source, target, capturedPiece);
             throw new GameBoardException("Você não pode se colocar em xeque!");
         }
+
+        if (InCheck(Opponent(CurrentPlayer)))
+            Check = true;
 
         Shift++;
         ChangePlayer();
