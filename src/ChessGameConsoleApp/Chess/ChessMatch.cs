@@ -76,8 +76,13 @@ internal class ChessMatch //test primary constructor
         if (InCheck(Opponent(CurrentPlayer)))
             Check = true;
 
-        Shift++;
-        ChangePlayer();
+        if (CheckMateTest(Opponent(CurrentPlayer)))
+            Finished = true;
+        else
+        {
+            Shift++;
+            ChangePlayer();
+        }
     }
 
     public void ValidateSourcePosition(Position pos) 
@@ -145,6 +150,34 @@ internal class ChessMatch //test primary constructor
         return false;
     }
 
+    public bool CheckMateTest(Color color)
+    {
+        if (!InCheck(color))
+            return false;
+
+        foreach(Piece piece in PiecesInGame(color))
+        {
+            bool[,] mat = piece.PossibleMoves();
+            for (int i = 0; i < GameBoard.Lines; i++)
+            {
+                for (int j = 0; j < GameBoard.Columns; j++)
+                {
+                    if (mat[i, j])
+                    {
+                        Position source = piece.Position;
+                        Position target = new Position(i, j);
+                        Piece capturedPiece = ExecuteMove(source, target);
+                        bool checkTest = InCheck(color);
+                        UndoMove(source, target, capturedPiece);
+                        if (!checkTest)
+                            return false;
+                    } 
+                }
+            }
+        }
+        return true;
+    }
+
     private Piece King(Color color)
     {
         foreach (Piece piece in PiecesInGame(color))
@@ -172,17 +205,10 @@ internal class ChessMatch //test primary constructor
     private void PlacePieces()
     {
         PlaceNewPiece('c', 1, new Tower(Color.White, GameBoard));
-        PlaceNewPiece('c', 2, new Tower(Color.White, GameBoard));
-        PlaceNewPiece('d', 2, new Tower(Color.White, GameBoard));
-        PlaceNewPiece('e', 2, new Tower(Color.White, GameBoard));
-        PlaceNewPiece('e', 1, new Tower(Color.White, GameBoard));
         PlaceNewPiece('d', 1, new King(Color.White, GameBoard));
+        PlaceNewPiece('h', 7, new Tower(Color.White, GameBoard));
 
-        PlaceNewPiece('c', 7, new Tower(Color.Black, GameBoard));
-        PlaceNewPiece('c', 8, new Tower(Color.Black, GameBoard));
-        PlaceNewPiece('d', 7, new Tower(Color.Black, GameBoard));
-        PlaceNewPiece('e', 7, new Tower(Color.Black, GameBoard));
-        PlaceNewPiece('e', 8, new Tower(Color.Black, GameBoard));
-        PlaceNewPiece('d', 8, new King(Color.Black, GameBoard));
+        PlaceNewPiece('a', 8, new King(Color.Black, GameBoard));
+        PlaceNewPiece('b', 8, new Tower(Color.Black, GameBoard));
     }
 }

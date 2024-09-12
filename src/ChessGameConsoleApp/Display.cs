@@ -19,19 +19,27 @@ internal class Display
         Console.WriteLine();
         Console.WriteLine($"Turno: {chessMatch.Shift}");
 
-        if (chessMatch.CurrentPlayer == Color.Black)
+        if (!chessMatch.Finished)
         {
-            ConsoleColor aux = Console.ForegroundColor;
-            Console.Write($"Aguardando jogada: ");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine(chessMatch.CurrentPlayer);
-            Console.ForegroundColor = aux;
-        }
-        else
-            Console.WriteLine($"Aguardando jogada: {chessMatch.CurrentPlayer}");
+            if (chessMatch.CurrentPlayer == Color.Black)
+            {
+                ConsoleColor aux = Console.ForegroundColor;
+                Console.Write($"Aguardando jogada: ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(chessMatch.CurrentPlayer);
+                Console.ForegroundColor = aux;
+            }
+            else
+                Console.WriteLine($"Aguardando jogada: {chessMatch.CurrentPlayer}");
 
-        if (chessMatch.Check)
-            Console.WriteLine("Xeque!");
+            if (chessMatch.Check)
+                Console.WriteLine("XEQUE!");
+        } 
+        else
+        {
+            Console.WriteLine("XEQUEMATE!");
+            Console.WriteLine($"Vencedor: {chessMatch.CurrentPlayer}");
+        }
     }
 
     public static void PrintCapturedPieces(ChessMatch chessMatch)
