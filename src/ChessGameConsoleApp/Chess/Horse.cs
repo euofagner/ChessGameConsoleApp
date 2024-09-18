@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ChessGameConsoleApp.Chess;
 
-internal class King(Color color, GameBoard gameBoard) : Piece(color, gameBoard)
+internal class Horse(Color color, GameBoard gameBoard) : Piece(color, gameBoard)
 {
     private bool CanMove(Position pos)
     {
@@ -22,60 +22,43 @@ internal class King(Color color, GameBoard gameBoard) : Piece(color, gameBoard)
 
         Position pos = new Position(0, 0);
 
-        //up
-        pos.SetValues(Position.Line - 1, Position.Column);
+        pos.SetValues(Position.Line - 1, Position.Column - 2);
         if (gameBoard.ValidPosition(pos) && CanMove(pos))
-        {
             mat[pos.Line, pos.Column] = true;
-        }
 
-        pos.SetValues(Position.Line - 1, Position.Column + 1);
+        pos.SetValues(Position.Line - 2, Position.Column - 1);
         if (gameBoard.ValidPosition(pos) && CanMove(pos))
-        {
             mat[pos.Line, pos.Column] = true;
-        }
 
-        pos.SetValues(Position.Line, Position.Column + 1);
+        pos.SetValues(Position.Line - 2, Position.Column + 1);
         if (gameBoard.ValidPosition(pos) && CanMove(pos))
-        {
             mat[pos.Line, pos.Column] = true;
-        }
 
-        pos.SetValues(Position.Line + 1, Position.Column + 1);
+        pos.SetValues(Position.Line - 1, Position.Column + 2);
         if (gameBoard.ValidPosition(pos) && CanMove(pos))
-        {
             mat[pos.Line, pos.Column] = true;
-        }
 
-        pos.SetValues(Position.Line + 1, Position.Column);
+        pos.SetValues(Position.Line + 1, Position.Column + 2);
         if (gameBoard.ValidPosition(pos) && CanMove(pos))
-        {
             mat[pos.Line, pos.Column] = true;
-        }
 
-        pos.SetValues(Position.Line + 1, Position.Column - 1);
+        pos.SetValues(Position.Line + 2, Position.Column + 1);
         if (gameBoard.ValidPosition(pos) && CanMove(pos))
-        {
             mat[pos.Line, pos.Column] = true;
-        }
 
-        pos.SetValues(Position.Line, Position.Column - 1);
+        pos.SetValues(Position.Line + 2, Position.Column - 1);
         if (gameBoard.ValidPosition(pos) && CanMove(pos))
-        {
             mat[pos.Line, pos.Column] = true;
-        }
 
-        pos.SetValues(Position.Line - 1, Position.Column - 1);
+        pos.SetValues(Position.Line +1, Position.Column - 2);
         if (gameBoard.ValidPosition(pos) && CanMove(pos))
-        {
             mat[pos.Line, pos.Column] = true;
-        }
 
         return mat;
     }
 
     public override string ToString()
     {
-        return "R";
+        return "C";
     }
 }

@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ChessGameConsoleApp.Board;
 
-internal abstract  class Piece(Color color, GameBoard board)
+internal abstract  class Piece(Color color, GameBoard gameBoard)
 {
     public Position? Position { get; set; } = null;
     public Color Color { get; protected set; } = color;
     public int Moves { get; protected set; }
-    public GameBoard? GameBoard { get; protected set; } = board;
+    public GameBoard? GameBoard { get; protected set; } = gameBoard;
 
     public void IncrementMoves()
     {
