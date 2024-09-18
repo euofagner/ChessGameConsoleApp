@@ -27,7 +27,7 @@ internal class Queen(Color color, GameBoard gameBoard) : Piece(color, gameBoard)
         while (gameBoard.ValidPosition(pos) && CanMove(pos))
         {
             mat[pos.Line, pos.Column] = true;
-            if (gameBoard.Piece(pos) != null || gameBoard.Piece(pos).Color != color)
+            if (gameBoard.Piece(pos) != null && gameBoard.Piece(pos).Color != color)
                 break;
 
             pos.SetValues(pos.Line, pos.Column - 1);
@@ -38,7 +38,7 @@ internal class Queen(Color color, GameBoard gameBoard) : Piece(color, gameBoard)
         while (gameBoard.ValidPosition(pos) && CanMove(pos))
         {
             mat[pos.Line, pos.Column] = true;
-            if (gameBoard.Piece(pos) != null || gameBoard.Piece(pos).Color != color)
+            if (gameBoard.Piece(pos) != null && gameBoard.Piece(pos).Color != color)
                 break;
 
             pos.SetValues(pos.Line, pos.Column + 1);
@@ -49,7 +49,7 @@ internal class Queen(Color color, GameBoard gameBoard) : Piece(color, gameBoard)
         while (gameBoard.ValidPosition(pos) && CanMove(pos))
         {
             mat[pos.Line, pos.Column] = true;
-            if (gameBoard.Piece(pos) != null || gameBoard.Piece(pos).Color != color)
+            if (gameBoard.Piece(pos) != null && gameBoard.Piece(pos).Color != color)
                 break;
 
             pos.SetValues(pos.Line - 1, pos.Column);
@@ -60,7 +60,7 @@ internal class Queen(Color color, GameBoard gameBoard) : Piece(color, gameBoard)
         while (gameBoard.ValidPosition(pos) && CanMove(pos))
         {
             mat[pos.Line, pos.Column] = true;
-            if (gameBoard.Piece(pos) != null || gameBoard.Piece(pos).Color != color)
+            if (gameBoard.Piece(pos) != null && gameBoard.Piece(pos).Color != color)
                 break;
 
             pos.SetValues(pos.Line + 1, pos.Column);
@@ -71,7 +71,7 @@ internal class Queen(Color color, GameBoard gameBoard) : Piece(color, gameBoard)
         while (gameBoard.ValidPosition(pos) && CanMove(pos))
         {
             mat[pos.Line, pos.Column] = true;
-            if (gameBoard.Piece(pos) != null || gameBoard.Piece(pos).Color != color)
+            if (gameBoard.Piece(pos) != null && gameBoard.Piece(pos).Color != color)
                 break;
 
             pos.SetValues(pos.Line - 1, pos.Column - 1);
@@ -82,7 +82,7 @@ internal class Queen(Color color, GameBoard gameBoard) : Piece(color, gameBoard)
         while (gameBoard.ValidPosition(pos) && CanMove(pos))
         {
             mat[pos.Line, pos.Column] = true;
-            if (gameBoard.Piece(pos) != null || gameBoard.Piece(pos).Color != color)
+            if (gameBoard.Piece(pos) != null && gameBoard.Piece(pos).Color != color)
                 break;
 
             pos.SetValues(pos.Line - 1, pos.Column + 1);
@@ -93,7 +93,7 @@ internal class Queen(Color color, GameBoard gameBoard) : Piece(color, gameBoard)
         while (gameBoard.ValidPosition(pos) && CanMove(pos))
         {
             mat[pos.Line, pos.Column] = true;
-            if (gameBoard.Piece(pos) != null || gameBoard.Piece(pos).Color != color)
+            if (gameBoard.Piece(pos) != null && gameBoard.Piece(pos).Color != color)
                 break;
 
             pos.SetValues(pos.Line + 1, pos.Column + 1);
@@ -104,7 +104,7 @@ internal class Queen(Color color, GameBoard gameBoard) : Piece(color, gameBoard)
         while (gameBoard.ValidPosition(pos) && CanMove(pos))
         {
             mat[pos.Line, pos.Column] = true;
-            if (gameBoard.Piece(pos) != null || gameBoard.Piece(pos).Color != color)
+            if (gameBoard.Piece(pos) != null && gameBoard.Piece(pos).Color != color)
                 break;
 
             pos.SetValues(pos.Line + 1, pos.Column - 1);

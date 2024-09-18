@@ -46,6 +46,28 @@ internal class ChessMatch //test primary constructor
         if(capturedPiece != null)
             _capturedPieces.Add(capturedPiece);
 
+        //Special move small rock
+        if(piece is King && target.Column == source.Column + 2)
+        {
+            Position towerSource = new(source.Line, source.Column + 3);
+            Position towerTarget = new(source.Line, source.Column + 1);
+
+            Piece tower = GameBoard.RemovePiece(towerSource);
+            tower.IncrementMoves();
+            GameBoard.PlacePiece(tower, towerTarget);
+        }
+
+        //Special move big rock
+        if (piece is King && target.Column == source.Column - 2)
+        {
+            Position towerSource = new(source.Line, source.Column - 4);
+            Position towerTarget = new(source.Line, source.Column - 1);
+
+            Piece tower = GameBoard.RemovePiece(towerSource);
+            tower.IncrementMoves();
+            GameBoard.PlacePiece(tower, towerTarget);
+        }
+
         return capturedPiece;
     }
 
@@ -61,6 +83,28 @@ internal class ChessMatch //test primary constructor
         }
 
         GameBoard.PlacePiece(piece, source);
+
+        //Special move small rock
+        if (piece is King && target.Column == source.Column + 2)
+        {
+            Position towerSource = new(source.Line, source.Column + 3);
+            Position towerTarget = new(source.Line, source.Column + 1);
+
+            Piece tower = GameBoard.RemovePiece(towerTarget);
+            tower.DecreasesMoves();
+            GameBoard.PlacePiece(tower, towerSource);
+        }
+
+        //Special move big rock
+        if (piece is King && target.Column == source.Column - 2)
+        {
+            Position towerSource = new(source.Line, source.Column - 4);
+            Position towerTarget = new(source.Line, source.Column - 1);
+
+            Piece tower = GameBoard.RemovePiece(towerTarget);
+            tower.DecreasesMoves();
+            GameBoard.PlacePiece(tower, towerSource);
+        }
     }
 
     public void ExecutePlay(Position source, Position target)
@@ -208,7 +252,7 @@ internal class ChessMatch //test primary constructor
         PlaceNewPiece('b', 1, new Horse(Color.White, GameBoard));
         PlaceNewPiece('c', 1, new Bishop(Color.White, GameBoard));
         PlaceNewPiece('d', 1, new Queen(Color.White, GameBoard));
-        PlaceNewPiece('e', 1, new King(Color.White, GameBoard));
+        PlaceNewPiece('e', 1, new King(Color.White, GameBoard, this));
         PlaceNewPiece('f', 1, new Bishop(Color.White, GameBoard));
         PlaceNewPiece('g', 1, new Horse(Color.White, GameBoard));
         PlaceNewPiece('h', 1, new Tower(Color.White, GameBoard));
@@ -225,7 +269,7 @@ internal class ChessMatch //test primary constructor
         PlaceNewPiece('b', 8, new Horse(Color.Black, GameBoard));
         PlaceNewPiece('c', 8, new Bishop(Color.Black, GameBoard));
         PlaceNewPiece('d', 8, new Queen(Color.Black, GameBoard));
-        PlaceNewPiece('e', 8, new King(Color.Black, GameBoard));
+        PlaceNewPiece('e', 8, new King(Color.Black, GameBoard, this));
         PlaceNewPiece('f', 8, new Bishop(Color.Black, GameBoard));
         PlaceNewPiece('g', 8, new Horse(Color.Black, GameBoard));
         PlaceNewPiece('h', 8, new Tower(Color.Black, GameBoard));
