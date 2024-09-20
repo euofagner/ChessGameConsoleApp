@@ -151,6 +151,22 @@ internal class ChessMatch //test primary constructor
             throw new GameBoardException("Você não pode se colocar em xeque!");
         }
 
+        //Special move Pawn promotion
+        Piece piece = GameBoard.Piece(target);
+
+        if (piece is Pawn)
+        {
+            if ((piece.Color == Color.White && target.Line == 0) || (piece.Color == Color.Black && target.Line == 7))
+            {
+                piece = GameBoard.RemovePiece(target);
+                _pieces.Remove(piece);
+
+                Piece queen = new Queen(piece.Color, GameBoard);
+                GameBoard.PlacePiece(queen, target);
+                _pieces.Add(queen);
+            }
+        }
+
         if (InCheck(Opponent(CurrentPlayer)))
             Check = true;
 
@@ -162,7 +178,6 @@ internal class ChessMatch //test primary constructor
             ChangePlayer();
         }
 
-        Piece piece = GameBoard.Piece(target);
         //Special move En Passant
         if (piece is Pawn && (target.Line == source.Line - 2 || target.Line == source.Line + 2))
             VulnerableEnPassant = piece; 
@@ -287,38 +302,41 @@ internal class ChessMatch //test primary constructor
 
     private void PlacePieces()
     {
-        PlaceNewPiece('a', 1, new Tower(Color.White, GameBoard));
-        PlaceNewPiece('b', 1, new Horse(Color.White, GameBoard));
-        PlaceNewPiece('c', 1, new Bishop(Color.White, GameBoard));
-        PlaceNewPiece('d', 1, new Queen(Color.White, GameBoard));
-        PlaceNewPiece('e', 1, new King(Color.White, GameBoard, this));
-        PlaceNewPiece('f', 1, new Bishop(Color.White, GameBoard));
-        PlaceNewPiece('g', 1, new Horse(Color.White, GameBoard));
-        PlaceNewPiece('h', 1, new Tower(Color.White, GameBoard));
-        PlaceNewPiece('a', 2, new Pawn(Color.White, GameBoard, this));
-        PlaceNewPiece('b', 2, new Pawn(Color.White, GameBoard, this));
-        PlaceNewPiece('c', 2, new Pawn(Color.White, GameBoard, this));
-        PlaceNewPiece('d', 2, new Pawn(Color.White, GameBoard, this));
-        PlaceNewPiece('e', 2, new Pawn(Color.White, GameBoard, this));
-        PlaceNewPiece('f', 2, new Pawn(Color.White, GameBoard, this));
-        PlaceNewPiece('g', 2, new Pawn(Color.White, GameBoard, this));
-        PlaceNewPiece('h', 2, new Pawn(Color.White, GameBoard, this));
+        PlaceNewPiece('h', 7, new Pawn(Color.White, GameBoard, this));
+        PlaceNewPiece('a', 2, new Pawn(Color.Black, GameBoard, this));
 
-        PlaceNewPiece('a', 8, new Tower(Color.Black, GameBoard));
-        PlaceNewPiece('b', 8, new Horse(Color.Black, GameBoard));
-        PlaceNewPiece('c', 8, new Bishop(Color.Black, GameBoard));
-        PlaceNewPiece('d', 8, new Queen(Color.Black, GameBoard));
+        //PlaceNewPiece('a', 1, new Tower(Color.White, GameBoard));
+        //PlaceNewPiece('b', 1, new Horse(Color.White, GameBoard));
+        //PlaceNewPiece('c', 1, new Bishop(Color.White, GameBoard));
+        //PlaceNewPiece('d', 1, new Queen(Color.White, GameBoard));
+        PlaceNewPiece('e', 1, new King(Color.White, GameBoard, this));
+        //PlaceNewPiece('f', 1, new Bishop(Color.White, GameBoard));
+        //PlaceNewPiece('g', 1, new Horse(Color.White, GameBoard));
+        //PlaceNewPiece('h', 1, new Tower(Color.White, GameBoard));
+        //PlaceNewPiece('a', 2, new Pawn(Color.White, GameBoard, this));
+        //PlaceNewPiece('b', 2, new Pawn(Color.White, GameBoard, this));
+        //PlaceNewPiece('c', 2, new Pawn(Color.White, GameBoard, this));
+        //PlaceNewPiece('d', 2, new Pawn(Color.White, GameBoard, this));
+        //PlaceNewPiece('e', 2, new Pawn(Color.White, GameBoard, this));
+        //PlaceNewPiece('f', 2, new Pawn(Color.White, GameBoard, this));
+        //PlaceNewPiece('g', 2, new Pawn(Color.White, GameBoard, this));
+        //PlaceNewPiece('h', 2, new Pawn(Color.White, GameBoard, this));
+
+        //PlaceNewPiece('a', 8, new Tower(Color.Black, GameBoard));
+        //PlaceNewPiece('b', 8, new Horse(Color.Black, GameBoard));
+        //PlaceNewPiece('c', 8, new Bishop(Color.Black, GameBoard));
+        //PlaceNewPiece('d', 8, new Queen(Color.Black, GameBoard));
         PlaceNewPiece('e', 8, new King(Color.Black, GameBoard, this));
-        PlaceNewPiece('f', 8, new Bishop(Color.Black, GameBoard));
-        PlaceNewPiece('g', 8, new Horse(Color.Black, GameBoard));
-        PlaceNewPiece('h', 8, new Tower(Color.Black, GameBoard));
-        PlaceNewPiece('a', 7, new Pawn(Color.Black, GameBoard, this));
-        PlaceNewPiece('b', 7, new Pawn(Color.Black, GameBoard, this));
-        PlaceNewPiece('c', 7, new Pawn(Color.Black, GameBoard, this));
-        PlaceNewPiece('d', 7, new Pawn(Color.Black, GameBoard, this));
-        PlaceNewPiece('e', 7, new Pawn(Color.Black, GameBoard, this));
-        PlaceNewPiece('f', 7, new Pawn(Color.Black, GameBoard, this));
-        PlaceNewPiece('g', 7, new Pawn(Color.Black, GameBoard, this));
-        PlaceNewPiece('h', 7, new Pawn(Color.Black, GameBoard, this));
+        //PlaceNewPiece('f', 8, new Bishop(Color.Black, GameBoard));
+        //PlaceNewPiece('g', 8, new Horse(Color.Black, GameBoard));
+        //PlaceNewPiece('h', 8, new Tower(Color.Black, GameBoard));
+        //PlaceNewPiece('a', 7, new Pawn(Color.Black, GameBoard, this));
+        //PlaceNewPiece('b', 7, new Pawn(Color.Black, GameBoard, this));
+        //PlaceNewPiece('c', 7, new Pawn(Color.Black, GameBoard, this));
+        //PlaceNewPiece('d', 7, new Pawn(Color.Black, GameBoard, this));
+        //PlaceNewPiece('e', 7, new Pawn(Color.Black, GameBoard, this));
+        //PlaceNewPiece('f', 7, new Pawn(Color.Black, GameBoard, this));
+        //PlaceNewPiece('g', 7, new Pawn(Color.Black, GameBoard, this));
+        //PlaceNewPiece('h', 7, new Pawn(Color.Black, GameBoard, this));
     }
 }
