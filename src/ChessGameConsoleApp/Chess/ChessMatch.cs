@@ -7,6 +7,7 @@ using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Numerics;
 using System.Reflection.PortableExecutable;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ internal class ChessMatch //test primary constructor
     public GameBoard? GameBoard { get; private set; }
     public bool Finished { get; private set; }
     public bool Check {  get; private set; }
+    public Piece? VulnerableEnPassant { get; private set; }
     
     public ChessMatch()
     {
@@ -31,6 +33,7 @@ internal class ChessMatch //test primary constructor
         CurrentPlayer = Color.White;
         Finished = false;
         Check = false;
+        VulnerableEnPassant = null;
         _pieces = new HashSet<Piece>();
         _capturedPieces = new HashSet<Piece>();
         PlacePieces();
@@ -68,6 +71,20 @@ internal class ChessMatch //test primary constructor
             GameBoard.PlacePiece(tower, towerTarget);
         }
 
+        if (piece is Pawn)
+        {
+            if (source.Column != target.Column && capturedPiece == null)
+            {
+                Position pawnPos;
+                if (piece.Color == Color.White)
+                    pawnPos = new(target.Line + 1, target.Column);
+                else
+                    pawnPos = new(target.Line - 1, target.Column);
+
+                capturedPiece = GameBoard.RemovePiece(pawnPos);
+                _capturedPieces.Add(capturedPiece);
+            }
+        }
         return capturedPiece;
     }
 
@@ -105,6 +122,23 @@ internal class ChessMatch //test primary constructor
             tower.DecreasesMoves();
             GameBoard.PlacePiece(tower, towerSource);
         }
+
+        //Special move En Passant
+        if (piece is Pawn)
+        {
+            if (source.Column != target.Column && capturedPiece == VulnerableEnPassant)
+            {
+                Piece pawn = GameBoard.RemovePiece(target);
+                Position posPawn;
+
+                if (piece.Color == Color.White)
+                    posPawn = new Position(3, target.Column);
+                else
+                    posPawn = new Position(4, target.Column);
+
+                GameBoard.PlacePiece(pawn, posPawn);
+            }
+        }
     }
 
     public void ExecutePlay(Position source, Position target)
@@ -127,8 +161,13 @@ internal class ChessMatch //test primary constructor
             Shift++;
             ChangePlayer();
         }
-    }
 
+        Piece piece = GameBoard.Piece(target);
+        //Special move En Passant
+        if (piece is Pawn && (target.Line == source.Line - 2 || target.Line == source.Line + 2))
+            VulnerableEnPassant = piece; 
+    }
+     
     public void ValidateSourcePosition(Position pos) 
     {
         if (GameBoard.Piece(pos) == null)
@@ -256,14 +295,14 @@ internal class ChessMatch //test primary constructor
         PlaceNewPiece('f', 1, new Bishop(Color.White, GameBoard));
         PlaceNewPiece('g', 1, new Horse(Color.White, GameBoard));
         PlaceNewPiece('h', 1, new Tower(Color.White, GameBoard));
-        PlaceNewPiece('a', 2, new Pawn(Color.White, GameBoard));
-        PlaceNewPiece('b', 2, new Pawn(Color.White, GameBoard));
-        PlaceNewPiece('c', 2, new Pawn(Color.White, GameBoard));
-        PlaceNewPiece('d', 2, new Pawn(Color.White, GameBoard));
-        PlaceNewPiece('e', 2, new Pawn(Color.White, GameBoard));
-        PlaceNewPiece('f', 2, new Pawn(Color.White, GameBoard));
-        PlaceNewPiece('g', 2, new Pawn(Color.White, GameBoard));
-        PlaceNewPiece('h', 2, new Pawn(Color.White, GameBoard));
+        PlaceNewPiece('a', 2, new Pawn(Color.White, GameBoard, this));
+        PlaceNewPiece('b', 2, new Pawn(Color.White, GameBoard, this));
+        PlaceNewPiece('c', 2, new Pawn(Color.White, GameBoard, this));
+        PlaceNewPiece('d', 2, new Pawn(Color.White, GameBoard, this));
+        PlaceNewPiece('e', 2, new Pawn(Color.White, GameBoard, this));
+        PlaceNewPiece('f', 2, new Pawn(Color.White, GameBoard, this));
+        PlaceNewPiece('g', 2, new Pawn(Color.White, GameBoard, this));
+        PlaceNewPiece('h', 2, new Pawn(Color.White, GameBoard, this));
 
         PlaceNewPiece('a', 8, new Tower(Color.Black, GameBoard));
         PlaceNewPiece('b', 8, new Horse(Color.Black, GameBoard));
@@ -273,13 +312,13 @@ internal class ChessMatch //test primary constructor
         PlaceNewPiece('f', 8, new Bishop(Color.Black, GameBoard));
         PlaceNewPiece('g', 8, new Horse(Color.Black, GameBoard));
         PlaceNewPiece('h', 8, new Tower(Color.Black, GameBoard));
-        PlaceNewPiece('a', 7, new Pawn(Color.Black, GameBoard));
-        PlaceNewPiece('b', 7, new Pawn(Color.Black, GameBoard));
-        PlaceNewPiece('c', 7, new Pawn(Color.Black, GameBoard));
-        PlaceNewPiece('d', 7, new Pawn(Color.Black, GameBoard));
-        PlaceNewPiece('e', 7, new Pawn(Color.Black, GameBoard));
-        PlaceNewPiece('f', 7, new Pawn(Color.Black, GameBoard));
-        PlaceNewPiece('g', 7, new Pawn(Color.Black, GameBoard));
-        PlaceNewPiece('h', 7, new Pawn(Color.Black, GameBoard));
+        PlaceNewPiece('a', 7, new Pawn(Color.Black, GameBoard, this));
+        PlaceNewPiece('b', 7, new Pawn(Color.Black, GameBoard, this));
+        PlaceNewPiece('c', 7, new Pawn(Color.Black, GameBoard, this));
+        PlaceNewPiece('d', 7, new Pawn(Color.Black, GameBoard, this));
+        PlaceNewPiece('e', 7, new Pawn(Color.Black, GameBoard, this));
+        PlaceNewPiece('f', 7, new Pawn(Color.Black, GameBoard, this));
+        PlaceNewPiece('g', 7, new Pawn(Color.Black, GameBoard, this));
+        PlaceNewPiece('h', 7, new Pawn(Color.Black, GameBoard, this));
     }
 }

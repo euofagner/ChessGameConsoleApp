@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 
 namespace ChessGameConsoleApp.Chess
 {
-    internal class Pawn(Color color, GameBoard gameBoard) : Piece(color, gameBoard)
+    internal class Pawn(Color color, GameBoard gameBoard, ChessMatch match) : Piece(color, gameBoard)
     {
+        private ChessMatch _match = match;
+
         private bool ExistOpponent(Position pos)
         {
             Piece piece = gameBoard.Piece(pos);
-            return piece != null && piece.Color != Color;
+            return piece != null && piece.Color != color;
         }
 
         private bool CanMove(Position pos)
@@ -44,6 +46,22 @@ namespace ChessGameConsoleApp.Chess
                 pos.SetValues(Position.Line - 1, Position.Column + 1);
                 if (gameBoard.ValidPosition(pos) && ExistOpponent(pos))
                     mat[pos.Line, pos.Column] = true;
+
+                //Special move En Passant
+                if (Position.Line == 3)
+                {
+                    Position left = new Position(Position.Line, Position.Column - 1);
+                    if(gameBoard.ValidPosition(left) && ExistOpponent(left) && gameBoard.Piece(left) == _match.VulnerableEnPassant)
+                    { 
+                        mat[left.Line - 1, left.Column] = true;
+                    }
+
+                    Position right = new Position(Position.Line, Position.Column + 1);
+                    if (gameBoard.ValidPosition(right) && ExistOpponent(right) && gameBoard.Piece(right) == _match.VulnerableEnPassant)
+                    {
+                        mat[right.Line - 1, right.Column] = true;
+                    }
+                }
             }
             else
             {
@@ -62,8 +80,23 @@ namespace ChessGameConsoleApp.Chess
                 pos.SetValues(Position.Line + 1, Position.Column + 1);
                 if (gameBoard.ValidPosition(pos) && ExistOpponent(pos))
                     mat[pos.Line, pos.Column] = true;
-            }
 
+                //Special move En Passant
+                if (Position.Line == 4)
+                {
+                    Position left = new Position(Position.Line, Position.Column - 1);
+                    if (gameBoard.ValidPosition(left) && ExistOpponent(left) && gameBoard.Piece(left) == _match.VulnerableEnPassant)
+                    {
+                        mat[left.Line + 1, left.Column] = true;
+                    }
+
+                    Position right = new Position(Position.Line, Position.Column + 1);
+                    if (gameBoard.ValidPosition(right) && ExistOpponent(right) && gameBoard.Piece(right) == _match.VulnerableEnPassant)
+                    {
+                        mat[right.Line + 1, right.Column] = true;
+                    }
+                }
+            }
             return mat;
         }
 
